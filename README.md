@@ -182,6 +182,27 @@ in `lazy evaluation` the object will not get created until or unless it is yet c
 
 if you user `let!(:zombie) { Zombie.create }` now it will get created before the example is called!
 
+# hooks and tags
+
+use of `before ` and `after` 
+
+	describe 'Zombie' do 
+	  let(:zombie) { Zombie.new }
+	  before { zombie.hungry! } # this will run before each example
+	  
+	  it 'is hungry' do 
+	    zombie.should be_nil
+	  end 
+	end
+you can use `before` and `after` with all the following variations
+
+`before(:each)` # run before each example
+`before(:all)` # run once before all
+`after(:each)` # run after each example
+`after(:all)` # run after all example
+
+ when i say example, it means the `IT` statement
+
 
 
 
