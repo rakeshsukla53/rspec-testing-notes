@@ -1,4 +1,4 @@
-# Rspec Testing (50 new things)
+# Rspec Testing 
 
 # Predicate matchers using should and be
 
@@ -202,6 +202,129 @@ you can use `before` and `after` with all the following variations
 `after(:all)` # run after all example
 
  when i say example, it means the `IT` statement
+
+
+# initialize as RSPEC project
+
+- if you want to initialize a project with `rspec` then type `rspec --init` 
+- using rspec --init will setup RSpec within a ruby project
+
+`rails g rspec­:install` this will install rspec into the current ruby project
+
+
+# include matcher
+
+
+# expect and change examples in RSPEC
+
+        describe Zombie do
+          it 'gains 3 IQ points by eating brains' do
+            zombie = Zombie.new
+            # zombie.iq.should == 0
+            # zombie.eat_brains
+            expect{zombie.eat_brains}.to change{zombie.iq}.from(0).to(3)
+            # zombie.iq.should == 3
+          end
+        end
+
+# use to should have 
+
+        describe Zombie do
+          it 'increases the number of tweets' do
+            zombie = Zombie.new(name: 'Ash')
+            zombie.tweets.new(message: "Arrrgggggggghhhhh")
+            # zombie.tweets.count.should > 0
+            zombie.should have(1).tweets
+          end
+        end
+
+# expect and raise_error conditions
+
+        describe Object, "#non_existent_message" do
+          it "should raise" do
+            expect{Object.non_existent_message}.to raise_error(NameError)
+          end
+        end
+        
+        #deliberate failure
+        describe Object, "#public_instance_methods" do
+          it "should raise" do
+            expect{Object.public_instance_methods}.to raise_error(NameError)
+          end
+        end
+
+# adding implicit subject
+
+        describe Zombie do
+          it 'should not be a genius' do
+            # zombie = Zombie.new
+            subject.should_not be_genius
+          end
+        end
+
+- there is no need to initialize the object, since subject does that
+
+# how to use IT'S
+
+    describe Zombie do
+      # it 'should have an iq of zero' do
+      #  subject.iq.should == 0
+      its(:iq) { should == 0 }
+      end
+    end
+
+IT'S - This is basically `it` and `subject`. You can do everything in one line
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
