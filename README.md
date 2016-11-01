@@ -277,6 +277,271 @@ IT'S - This is basically `it` and `subject`. You can do everything in one line
 
 
 
+# Its  vs it
+
+when you to pass a function or method to your subject then you should use `its` otherwise `it` 
+
+    describe Zombie do
+      it { should_not be_genius }
+      its(:iq) { should == 0 }
+          
+      context "with high IQ" do
+        subject { Zombie.new(iq: 3) }
+        it { should be_genius }
+        its(:brains_eaten_count) { should == 1 }
+      end  
+      
+    end
+
+this will implicitly takes the subject defined defined above for `it`
+
+# Subject vs Let 
+
+    describe Zombie do
+      let(:tweet) { Tweet.new }
+      let(:zombie) { Zombie.new(tweets: [tweet]) }
+      subject { zombie }
+      its(:tweets) { should include(tweet) }
+      its(:latest_tweet) { should == tweet } 
+    end
+
+subject block is now referencing the `Let` block defined above!
+
+`newer` syntax
+
+
+    describe Zombie do
+      let(:tweet) { Tweet.new }
+      subject(:zombie) { Zombie.new(tweets: [tweet]) }
+      its(:tweets) { should include(tweet) }
+      its(:latest_tweet) { should == tweet } 
+    end
+
+
+# lazy evaluation 
+
+    describe Zombie do
+      let(:tweet) { Tweet.new }
+      let(:zombie) { Zombie.new(tweets: [tweet]) }
+      subject { zombie }
+      it 'creates a zombie' { Zombie.count == 1 } 
+    end
+
+step by step evaluation:
+
+1 - examples begins to run 
+2 - needs to know its subject 
+3 - zombie gets created!! 
+
+the above tests is going to `FAIL`
+
+if you want to create a new zombie before every example then you need to do this
+
+
+      let!(:tweet) { Tweet.create(tweets: [tweet]) }
+
+this will create a new zombie object every time before the evaluation
+
+# using BEFORE and AFTER in RSPECS
+
+    describe Zombie do
+      let(:zombie) { Zombie.new }
+      subject { zombie }
+      before { zombie.eat_brains }
+      
+      it 'is not a dummy zombie' do
+        zombie.should_not be_dummy
+      end
+    
+      it 'is a genius zombie' do
+        zombie.should be_genius
+      end
+    end
+
+
+    describe Zombie do
+      let(:zombie) { Zombie.new }
+      before { zombie.iq = 0 }
+      subject { zombie }
+    
+      it { should be_dummy }
+    
+      context 'with a smart zombie' do
+        before { zombie.iq = 3 }  
+        it { should_not be_dummy }
+      end
+    end
+
+if you're defining a new `context` then the before conditions should go inside it
+
+# difference between Describe and Context in Rspec
+
+There is not much difference between describe and context. The difference lies in readability. I tend to use context when 
+I want to separate specs based on conditions. describe I use to separate methods being tested or behavior being tested.
+One main thing that changed in the latest RSpec is that context can no longer be used as a top-level method. 
+
+    describe Zombie do
+      let(:zombie) { Zombie.new }
+      subject { zombie }
+        
+      context 'with a dummy zombie' do
+        before { zombie.iq = 0 }
+        it { should be_dummy }
+      end
+    
+      context 'with a smart zombie' do
+        before { zombie.iq = 3 }
+        it { should_not be_dummy }
+      end
+      
+    end
+
+# defining shared examples in rspecs
+
+    shared_examples_for 'the brainless' do
+      it { should be_dummy }
+      it { should_not be_genius }
+    end
+    
+    describe Zombie do
+      let(:zombie) { Zombie.new }
+      subject { zombie }
+      it_behaves_like 'the brainless'
+    end
+    
+    describe Plant do
+      let(:plant) { Plant.new }
+      subject { plant }
+      it_behaves_like 'the brainless'
+    end
+
+
+# METADATA WITH FILTER 
+
+    describe Zombie do
+      let(:zombie) { Zombie.new }
+      subject { zombie }
+    
+      context 'with a dummy zombie' do
+        before { zombie.iq = 0 }
+        it { should be_dummy }
+      end
+    
+      context 'with a smart zombie', focus: true do
+        before { zombie.iq = 3 }
+        it { should_not be_dummy }
+      end
+    end
+
+Add the focus tag to the 'with a smart zombie' context block. This way we can run $ rspec --tag focus and just run these examples.
+
+Run the rspec command that will run only the specs tagged with dumb in the spec/models/zombie_spec.rb file.
+`rspec --tag­ dumb spec/­models/zom­bie_spec.rb`
+
+`rspec --tag­ ~dumb­ spec/­models/zom­bie_spec.rb` if you want to skip all the rspecs tagged with `dumb`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
